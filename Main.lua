@@ -1,10 +1,3 @@
-if not game:IsLoaded() then
-    repeat task.wait() until game:IsLoaded()
-end
-
--- 1. CHỐNG CRASH CHO PC & ĐIỆN THOẠI
-if setfpscap then setfpscap(60) end
-
 Settings = Settings or {}
 
 local Players = game:GetService("Players")
@@ -10177,7 +10170,7 @@ while true do
 end
 
 task.spawn(function()
-    while task.wait(0.0001) do
+    while task.wait(0.01) do
         -- Só executa se o toggle estiver ativado
         if _G.AutoAttack then
             local _Character = game.Players.LocalPlayer.Character
@@ -10664,54 +10657,24 @@ v496:AddButton({
 v496:AddButton({
 	Name = "FPS Boost",
 	Callback = function()
-        if not game:IsLoaded() then
-            repeat task.wait() until game:IsLoaded()
-        end
-
-        pcall(function()
-            -- Lighting
-            local Lighting = game:GetService("Lighting")
-            Lighting.GlobalShadows = false
-            Lighting.FogEnd = 1e10
-            Lighting.Brightness = 1
-
-            for _, fx in ipairs(Lighting:GetChildren()) do
-                if fx:IsA("BloomEffect")
-                or fx:IsA("BlurEffect")
-                or fx:IsA("ColorCorrectionEffect")
-                or fx:IsA("SunRaysEffect")
-                or fx:IsA("DepthOfFieldEffect") then
-                    fx.Enabled = false
-                end
-            end
-
-            -- World objects
-            for _, v in ipairs(workspace:GetDescendants()) do
-                if v:IsA("BasePart") then
-                    v.Material = Enum.Material.SmoothPlastic
-                    v.Reflectance = 0
-
-                elseif v:IsA("Decal") or v:IsA("Texture") then
-                    v.Transparency = 1
-
-                elseif v:IsA("ParticleEmitter")
-                or v:IsA("Trail")
-                or v:IsA("Beam") then
-                    v.Enabled = false
-                end
-            end
-        end)
-
-        if setfpscap then setfpscap(60) end
-    end
-v496:AddButton({
-	Name = "Boost Fps (VIP)",
-	Callback = function()
-        repeat wait(5) until game:IsLoaded()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/TurboLite/Script/main/FixLag.lua"))()
-        ))()
-    end
+		for _, v in ipairs(game:GetDescendants()) do
+			if v:IsA("BasePart") then
+				v.Material = Enum.Material.SmoothPlastic
+				v.Reflectance = 0
+			elseif v:IsA("Decal") or v:IsA("Texture") then
+				v:Destroy()
+			elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+				v.Enabled = false
+			elseif v:IsA("Lighting") then
+				v.GlobalShadows = false
+				v.FogEnd = 1e10
+				v.Brightness = 0
+			end
+		end
+		setfpscap(60)
+	end
 })
+
 local v1218 = {
     "NOMOREHACK",
     "BANEXPLOIT",
